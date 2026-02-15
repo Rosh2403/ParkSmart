@@ -1,7 +1,17 @@
+import { unstable_cache } from "next/cache";
 import { fetchCarparkAvailability, processCarparks } from "@/lib/parking";
 
-let cache = { data: null, timestamp: 0 };
-const CACHE_TTL = 60 * 1000;
+// Cache all LTA carpark data for 60 seconds using Next.js Data Cache.
+// Unlike a module-level variable, unstable_cache persists across serverless
+// function invocations on Vercel and other edge/serverless platforms.
+const getCachedCarparks = unstable_cache(
+  async () => {
+    const apiKey = process.env.LTA_API_KEY;
+    return fetchCarparkAvailability(apiKey);
+  },
+  ["lta-carparks"],
+  { revalidate: 60, tags: ["lta-carparks"] }
+);
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -21,13 +31,8 @@ export async function GET(request) {
   }
 
   try {
-    const now = Date.now();
-    if (!cache.data || now - cache.timestamp > CACHE_TTL) {
-      cache.data = await fetchCarparkAvailability(apiKey);
-      cache.timestamp = now;
-    }
-
-    const carparks = processCarparks(cache.data, lat, lng, duration, priority, radius);
+    const rawData = await getCachedCarparks();
+    const carparks = processCarparks(rawData, lat, lng, duration, priority, radius);
     return Response.json({ carparks, total: carparks.length });
   } catch (err) {
     console.error("Carpark API error:", err);
