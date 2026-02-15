@@ -148,7 +148,7 @@ export default function ParkedPage() {
         session.parkedAt,
         session.carparkId || null
       );
-      const entry = logSpend({
+      const entry = await logSpend({
         carparkName:  session.carparkName || "Unknown Carpark",
         carparkId:    session.carparkId,
         agency:       session.agency || "HDB",
@@ -159,7 +159,7 @@ export default function ParkedPage() {
         lat:          session.lat,
         lng:          session.lng,
       });
-      setLoggedEntry(entry);
+      if (entry) setLoggedEntry(entry);
       // Clear the pre-filled carpark after use
       try { localStorage.removeItem("parksmart_last_selected_carpark"); } catch {}
       setPrefilledCarpark(null);
