@@ -5,6 +5,12 @@ node_modules/
 out/
 .vercel
 
+# IDE
+.idea/
+
+# Skill references (local only)
+references/
+
 # Capacitor / Android build artifacts
 android/.gradle/
 android/build/
