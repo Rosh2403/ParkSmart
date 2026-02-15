@@ -9,15 +9,26 @@ const PRIORITIES = [
   { key: "best_value", label: "Best Value", icon: "✨", desc: "Quality + price" },
 ];
 
-export default function SearchPanel({ onSearch, loading, initialDest }) {
+export default function SearchPanel({ onSearch, loading, initialDest, initialSearchState }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedDest, setSelectedDest] = useState(null);
   const [duration, setDuration] = useState(2);
   const [priority, setPriority] = useState("balanced");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const hydratedFromSavedStateRef = useRef(false);
   const debounceRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Restore last used Find form values after tab/page switches.
+  useEffect(() => {
+    if (!initialSearchState || hydratedFromSavedStateRef.current) return;
+    setQuery(initialSearchState.query || "");
+    setSelectedDest(initialSearchState.selectedDest || null);
+    setDuration(typeof initialSearchState.duration === "number" ? initialSearchState.duration : 2);
+    setPriority(initialSearchState.priority || "balanced");
+    hydratedFromSavedStateRef.current = true;
+  }, [initialSearchState]);
 
   // Pre-fill when deep-linked from favourites (?lat=&lng=&name=)
   useEffect(() => {
