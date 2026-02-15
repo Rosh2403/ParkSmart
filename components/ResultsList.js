@@ -204,16 +204,19 @@ export function ResultsSkeleton() {
 export default function ResultsList({ carparks, recommendations, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
   const [favIds, setFavIds] = useState(new Set());
 
-  // Sync favourites from localStorage; update on change events
+  // Sync favourites from Supabase; update on change events
   useEffect(() => {
-    const sync = () => setFavIds(new Set(getFavourites().map((f) => f.id)));
+    const sync = async () => {
+      const favs = await getFavourites();
+      setFavIds(new Set(favs.map((f) => f.id)));
+    };
     sync();
     window.addEventListener("favouritesChange", sync);
     return () => window.removeEventListener("favouritesChange", sync);
   }, []);
 
-  const handleToggleFav = (cp) => {
-    toggleFavourite({
+  const handleToggleFav = async (cp) => {
+    await toggleFavourite({
       id: cp.id,
       name: cp.name,
       agency: cp.agency,

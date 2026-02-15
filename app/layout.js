@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata = {
   title: "ParkSmart — Singapore Parking Optimizer",
@@ -39,12 +40,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        {/* Header is a Server Component — rendered once, not part of the client bundle */}
-        <Header />
-        {children}
-        {/* BottomNav is a Client Component (needs usePathname) rendered in the layout
-            so it persists across tab navigations without unmounting */}
-        <BottomNav />
+        {/* AuthProvider: generates device ID + runs one-time localStorage migration */}
+        <AuthProvider>
+          {/* Header is a Server Component — rendered once, not part of the client bundle */}
+          <Header />
+          {children}
+          {/* BottomNav is a Client Component (needs usePathname) rendered in the layout
+              so it persists across tab navigations without unmounting */}
+          <BottomNav />
+        </AuthProvider>
       </body>
     </html>
   );

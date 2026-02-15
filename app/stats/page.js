@@ -89,22 +89,22 @@ export default function StatsPage() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   useEffect(() => {
-    const sync = () => setLog(getSpendLog());
+    const sync = async () => setLog(await getSpendLog());
     sync();
     window.addEventListener("spendLogChange", sync);
     return () => window.removeEventListener("spendLogChange", sync);
   }, []);
 
-  const thisMonthTotal = useMemo(() => getMonthlyTotal(viewYear, viewMonth), [log, viewYear, viewMonth]);
+  const thisMonthTotal = useMemo(() => getMonthlyTotal(log, viewYear, viewMonth), [log, viewYear, viewMonth]);
   const prevMonthTotal = useMemo(() => {
     const pm = viewMonth === 0 ? 11 : viewMonth - 1;
     const py = viewMonth === 0 ? viewYear - 1 : viewYear;
-    return getMonthlyTotal(py, pm);
+    return getMonthlyTotal(log, py, pm);
   }, [log, viewYear, viewMonth]);
 
-  const weeklyTotals = useMemo(() => getWeeklyTotals(8), [log]);
-  const topCarparks  = useMemo(() => getTopCarparks(5),   [log]);
-  const monthEntries = useMemo(() => getMonthEntries(viewYear, viewMonth), [log, viewYear, viewMonth]);
+  const weeklyTotals = useMemo(() => getWeeklyTotals(log, 8), [log]);
+  const topCarparks  = useMemo(() => getTopCarparks(log, 5),   [log]);
+  const monthEntries = useMemo(() => getMonthEntries(log, viewYear, viewMonth), [log, viewYear, viewMonth]);
 
   const monthDelta = thisMonthTotal - prevMonthTotal;
   const isCurrentMonth =
@@ -119,12 +119,12 @@ export default function StatsPage() {
     else setViewMonth((m) => m + 1);
   };
 
-  const handleClearAll = () => {
-    clearSpendLog();
+  const handleClearAll = async () => {
+    await clearSpendLog();
     setShowClearConfirm(false);
   };
 
-  const handleDelete = (id) => deleteEntry(id);
+  const handleDelete = (id) => { deleteEntry(id); };
 
   return (
     <main className={styles.main}>

@@ -32,9 +32,10 @@ export default function BottomNav() {
 
   // Track number of saved carparks for the dot badge on the Saved tab
   useEffect(() => {
-    const sync = () => {
+    const sync = async () => {
       try {
-        const favs = JSON.parse(localStorage.getItem("parksmart_favourites")) || [];
+        const { getFavourites } = await import("@/lib/favouritesStorage");
+        const favs = await getFavourites();
         setSavedCount(favs.length);
       } catch {
         setSavedCount(0);

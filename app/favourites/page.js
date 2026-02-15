@@ -19,15 +19,15 @@ export default function FavouritesPage() {
   const [favs, setFavs] = useState([]);
 
   useEffect(() => {
-    const load = () => setFavs(getFavourites());
+    const load = async () => setFavs(await getFavourites());
     load();
     window.addEventListener("favouritesChange", load);
     return () => window.removeEventListener("favouritesChange", load);
   }, []);
 
-  const handleRemove = (id) => {
-    removeFavourite(id);
-    // state updates via event above
+  const handleRemove = async (id) => {
+    await removeFavourite(id);
+    // state updates via favouritesChange event
   };
 
   const handleNavigate = (fav) => {
