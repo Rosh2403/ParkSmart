@@ -1,0 +1,323 @@
+/* ---- Summary bar ---- */
+.summaryBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.summaryChip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 12px;
+  flex: 1 0 auto;
+  min-width: 90px;
+}
+
+.summaryChipLabel {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summaryChipValue {
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+/* ---- List wrapper ---- */
+.listWrapper {
+  padding: 0 24px 32px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moreNote {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* ---- Empty state ---- */
+.emptyState {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.emptyText {
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* ---- Carpark card ---- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.cardSelected {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.badgeSlot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.cardBody {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardNameWithBadge {
+  padding-right: 80px;
+}
+
+.cardMeta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.centralLabel {
+  font-size: 10px;
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.cardStats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.cardCost {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.cardCostLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.cardMinorStats {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.lotsHigh  { color: var(--green);  font-weight: 600; }
+.lotsMid   { color: var(--yellow); font-weight: 600; }
+.lotsLow   { color: var(--red);    font-weight: 600; }
+
+/* ---- Expanded detail panel ---- */
+.expandedPanel {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  animation: slideUp 0.3s ease;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.statBox {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.statBoxLabel {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 3px;
+}
+
+.statBoxValue {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.statBoxSub {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+/* ---- Cost breakdown ---- */
+.costBreakdown {
+  margin-top: 10px;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.costBreakdownTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 6px;
+}
+
+.costRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.capRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+
+.costTotal {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 4px;
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.costTotalAmount {
+  color: var(--green);
+}
+
+/* ---- Navigate button ---- */
+.navigateBtn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s;
+}
+
+/* ---- Badge ---- */
+.badge {
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badgeBestMatch { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.badgeCheapest  { background: linear-gradient(135deg, #10b981, #059669); }
+.badgeNearest   { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+/* ---- Agency badge ---- */
+.agencyBadge {
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+}
+
+.agencyHDB { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.agencyURA { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.agencyLTA { background: rgba(16, 185, 129, 0.15); color: #2dd4bf; }
+
+/* ---- Skeleton ---- */
+.skeletonSummaryBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.skeletonCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.skeletonCardBody {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.skeletonAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeletonLines {
+  flex: 1;
+}
+
+.skeletonLine {
+  border-radius: 8px;
+  margin-bottom: 8px;
+}

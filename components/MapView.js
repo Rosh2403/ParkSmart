@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import styles from "./MapView.module.css";
 
 export default function MapView({ destination, carparks, selectedCarpark, onSelectCarpark }) {
   const mapRef = useRef(null);
@@ -147,15 +148,8 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
   }, [selectedCarpark]);
 
   return (
-    <div
-      style={{
-        borderRadius: 14,
-        overflow: "hidden",
-        border: "1px solid var(--border)",
-        height: 250,
-      }}
-    >
-      <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+    <div className={styles.container}>
+      <div ref={mapRef} className={styles.map} />
     </div>
   );
 }

@@ -1,0 +1,75 @@
+.main {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  /* Leave room for the bottom nav */
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}
+
+.mapWrapper {
+  margin: 0 24px 16px;
+  animation: slideUp 0.4s ease;
+}
+
+.errorBanner {
+  margin: 0 24px 16px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #fca5a5;
+}
+
+.errorBannerCode {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.errorBannerLink {
+  color: #818cf8;
+}
+
+/* Empty / welcome state */
+.welcome {
+  padding: 40px 24px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.welcomeIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.welcomeText {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.welcomeFeatures {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+
+.welcomeFeatureItem {
+  text-align: center;
+}
+
+.welcomeFeatureIcon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.welcomeFeatureLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+}
