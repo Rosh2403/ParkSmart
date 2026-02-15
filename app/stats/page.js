@@ -172,6 +172,25 @@ export default function StatsPage() {
         )}
       </div>
 
+      {/* ── Clear History ── */}
+      {log.length > 0 && (
+        <div className={styles.clearSection}>
+          {showClearConfirm ? (
+            <div className={styles.clearConfirm}>
+              <p className={styles.clearConfirmText}>Delete all {log.length} sessions?</p>
+              <div className={styles.clearConfirmBtns}>
+                <button className={styles.clearConfirmYes} onClick={handleClearAll}>Yes, clear all</button>
+                <button className={styles.clearConfirmNo} onClick={() => setShowClearConfirm(false)}>Cancel</button>
+              </div>
+            </div>
+          ) : (
+            <button className={styles.clearBtn} onClick={() => setShowClearConfirm(true)}>
+              🗑 Clear All History
+            </button>
+          )}
+        </div>
+      )}
+
       {/* ── Weekly Trend ── */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>Weekly Trend</div>
@@ -254,24 +273,6 @@ export default function StatsPage() {
         </div>
       )}
 
-      {/* ── Clear History ── */}
-      {log.length > 0 && (
-        <div className={styles.clearSection}>
-          {showClearConfirm ? (
-            <div className={styles.clearConfirm}>
-              <p className={styles.clearConfirmText}>Delete all {log.length} sessions?</p>
-              <div className={styles.clearConfirmBtns}>
-                <button className={styles.clearConfirmYes} onClick={handleClearAll}>Yes, clear all</button>
-                <button className={styles.clearConfirmNo} onClick={() => setShowClearConfirm(false)}>Cancel</button>
-              </div>
-            </div>
-          ) : (
-            <button className={styles.clearBtn} onClick={() => setShowClearConfirm(true)}>
-              🗑 Clear All History
-            </button>
-          )}
-        </div>
-      )}
     </main>
   );
 }
