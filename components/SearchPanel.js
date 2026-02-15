@@ -142,8 +142,8 @@ export default function SearchPanel({ onSearch, loading }) {
                     borderBottom: i < suggestions.length - 1 ? "1px solid var(--border)" : "none",
                     transition: "background 0.15s",
                   }}
-                  onMouseEnter={(e) => (e.target.style.background = "rgba(99,102,241,0.1)")}
-                  onMouseLeave={(e) => (e.target.style.background = "transparent")}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(99,102,241,0.1)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 >
                   <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{s.name}</div>
                   <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{s.address}</div>
