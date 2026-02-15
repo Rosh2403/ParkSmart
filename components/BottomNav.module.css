@@ -1,0 +1,81 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  /* left: 0 + right: 0 + max-width + margin: auto correctly centers a
+     fixed element without the horizontal-overflow side-effect of
+     left: 50% + transform: translateX(-50%) */
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(10, 14, 26, 0.92);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+}
+
+.tabList {
+  display: flex;
+  height: 64px;
+  align-items: stretch;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: inherit;
+  transition: color 0.2s;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent tap highlight flash on mobile */
+  user-select: none;
+}
+
+.tab:hover {
+  color: var(--text-secondary);
+}
+
+.tabActive {
+  color: var(--accent-light);
+}
+
+.tabIcon {
+  /* Fixed 28×28 box keeps all emoji visually equal regardless of glyph width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.tabLabel {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Active indicator dot below the label */
+.tabActive .tabLabel::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  margin: 3px auto 0;
+}

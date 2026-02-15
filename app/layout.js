@@ -1,5 +1,6 @@
 import "./globals.css";
 import Header from "@/components/Header";
+import BottomNav from "@/components/BottomNav";
 
 export const metadata = {
   title: "ParkSmart — Singapore Parking Optimizer",
@@ -41,6 +42,9 @@ export default function RootLayout({ children }) {
         {/* Header is a Server Component — rendered once, not part of the client bundle */}
         <Header />
         {children}
+        {/* BottomNav is a Client Component (needs usePathname) rendered in the layout
+            so it persists across tab navigations without unmounting */}
+        <BottomNav />
       </body>
     </html>
   );
