@@ -9,6 +9,8 @@ const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 import ErrorBoundary from "@/components/ErrorBoundary";
 import styles from "./page.module.css";
 
+const FIND_PAGE_STATE_KEY = "parksmart_find_page_state_v1";
+
 export default function Home() {
   const [destination, setDestination] = useState(null);
   const [carparks, setCarparks] = useState([]);
@@ -21,6 +23,8 @@ export default function Home() {
   const [showMap, setShowMap] = useState(false);
   const [searched, setSearched] = useState(false);
   const [initialDest, setInitialDest] = useState(null);
+  const [initialSearchState, setInitialSearchState] = useState(null);
+  const [hasRestoredState, setHasRestoredState] = useState(false);
 
   const handleSearch = useCallback(async (dest, dur, pri) => {
     setLoading(true);
@@ -72,10 +76,80 @@ export default function Home() {
     );
   }, []);
 
+  // Restore the Find page state so tab switches don't reset the search.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(FIND_PAGE_STATE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return;
+
+      setDestination(parsed.destination || null);
+      setCarparks(Array.isArray(parsed.carparks) ? parsed.carparks : []);
+      setRecommendations(Array.isArray(parsed.recommendations) ? parsed.recommendations : []);
+      setSelectedCarpark(parsed.selectedCarpark || null);
+      setDuration(typeof parsed.duration === "number" ? parsed.duration : 2);
+      setPriority(parsed.priority || "balanced");
+      setShowMap(!!parsed.showMap);
+      setSearched(!!parsed.searched);
+      setInitialSearchState(parsed.searchPanel || null);
+    } catch {
+      // ignore malformed saved state
+    } finally {
+      setHasRestoredState(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasRestoredState) return;
+    try {
+      if (!searched) {
+        localStorage.removeItem(FIND_PAGE_STATE_KEY);
+        return;
+      }
+      localStorage.setItem(
+        FIND_PAGE_STATE_KEY,
+        JSON.stringify({
+          destination,
+          carparks,
+          recommendations,
+          selectedCarpark,
+          duration,
+          priority,
+          showMap,
+          searched,
+          searchPanel: {
+            query: destination?.name || "",
+            selectedDest: destination,
+            duration,
+            priority,
+          },
+        })
+      );
+    } catch {
+      // best-effort persistence only
+    }
+  }, [
+    hasRestoredState,
+    searched,
+    destination,
+    carparks,
+    recommendations,
+    selectedCarpark,
+    duration,
+    priority,
+    showMap,
+  ]);
+
   return (
     <main className={styles.main}>
       <ErrorBoundary>
-        <SearchPanel onSearch={handleSearch} loading={loading} initialDest={initialDest} />
+        <SearchPanel
+          onSearch={handleSearch}
+          loading={loading}
+          initialDest={initialDest}
+          initialSearchState={initialSearchState}
+        />
 
         {error && (
           <div className={styles.errorBanner}>
