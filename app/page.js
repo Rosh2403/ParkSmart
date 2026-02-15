@@ -2,8 +2,10 @@
 import { useState, useCallback } from "react";
 import SearchPanel from "@/components/SearchPanel";
 import ResultsList, { ResultsSkeleton } from "@/components/ResultsList";
-import MapView from "@/components/MapView";
-import Header from "@/components/Header";
+// MapView uses Leaflet (browser-only) — dynamic with ssr:false excludes it
+// from the server bundle and removes the need for the runtime import() dance
+import dynamic from "next/dynamic";
+const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 import ErrorBoundary from "@/components/ErrorBoundary";
 import styles from "./page.module.css";
 
@@ -56,7 +58,6 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <ErrorBoundary>
-        <Header />
         <SearchPanel onSearch={handleSearch} loading={loading} />
 
         {error && (
