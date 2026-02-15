@@ -19,9 +19,9 @@
 .summaryChipLabel {
   font-size: 9px;
   color: var(--text-muted);
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .summaryChipValue {
@@ -66,18 +66,33 @@
 
 /* ---- Carpark card ---- */
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-left: 3px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   padding: 16px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  animation: cardEntry 0.3s ease both;
+  animation-delay: var(--stagger-delay, 0ms);
 }
 
 .cardSelected {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
+  background: color-mix(in srgb, var(--bg-secondary) 88%, var(--amber) 12%);
+  border-color: rgba(212, 168, 90, 0.12);
+  border-left-color: var(--amber);
+  box-shadow: 0 0 0 1px rgba(212, 168, 90, 0.15), 0 4px 20px rgba(0,0,0,0.35);
+}
+
+/* Left bar coloring by result type */
+.cardBestMatch  { border-left-color: var(--amber); }
+.cardCheapest   { border-left-color: var(--teal); }
+.cardNearest    { border-left-color: var(--orange); }
+
+/* Favourite border */
+.cardFavourited {
+  border-color: rgba(212, 168, 90, 0.2);
 }
 
 .cardBody {
@@ -128,8 +143,9 @@
 
 .cardCost {
   font-size: 20px;
-  font-weight: 800;
-  color: var(--green);
+  font-weight: 600;
+  color: var(--teal);
+  font-family: var(--font-mono);
 }
 
 .cardCostLabel {
@@ -143,6 +159,7 @@
   gap: 10px;
   font-size: 12px;
   color: var(--text-secondary);
+  font-family: var(--font-mono);
 }
 
 .lotsHigh  { color: var(--green);  font-weight: 600; }
@@ -173,13 +190,16 @@
 .statBoxLabel {
   font-size: 9px;
   color: var(--text-muted);
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin-bottom: 3px;
 }
 
 .statBoxValue {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
+  font-family: var(--font-mono);
 }
 
 .statBoxSub {
@@ -198,10 +218,12 @@
 }
 
 .costBreakdownTitle {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: var(--green);
-  font-family: 'Space Mono', monospace;
+  color: var(--teal);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin-bottom: 6px;
 }
 
@@ -232,7 +254,8 @@
 }
 
 .costTotalAmount {
-  color: var(--green);
+  color: var(--teal);
+  font-family: var(--font-mono);
 }
 
 /* ---- Expanded action buttons row ---- */
@@ -246,49 +269,72 @@
 .navigateBtn {
   flex: 1;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: none;
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: #fff;
+  background: var(--teal);
+  color: #0A0A0A;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: inherit;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(0, 204, 168, 0.2);
   transition: all 0.2s;
 }
+.navigateBtn:active { transform: scale(0.97); }
 
 /* ---- Park Here button ---- */
 .parkHereBtn {
   flex: 1;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--accent-light);
+  border-radius: 9px;
+  border: 1px solid rgba(212, 168, 90, 0.35);
+  background: var(--amber-dim);
+  color: var(--amber-light);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   transition: all 0.2s;
 }
+.parkHereBtn:active { transform: scale(0.97); }
 
 /* ---- Badge ---- */
 .badge {
-  color: #fff;
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 3px 8px;
-  border-radius: 6px;
-  font-family: 'Space Mono', monospace;
-  letter-spacing: 0.04em;
+  border-radius: 5px;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
   white-space: nowrap;
+  text-transform: uppercase;
+  border: 1px solid transparent;
 }
 
-.badgeBestMatch { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-.badgeCheapest  { background: linear-gradient(135deg, #10b981, #059669); }
-.badgeNearest   { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.badgeFree      { background: linear-gradient(135deg, #10b981, #059669); }
+.badgeBestMatch {
+  background: var(--amber-dim);
+  color: var(--amber-light);
+  border-color: rgba(212, 168, 90, 0.3);
+}
+.badgeCheapest {
+  background: rgba(0, 204, 168, 0.12);
+  color: var(--teal);
+  border-color: rgba(0, 204, 168, 0.25);
+}
+.badgeNearest {
+  background: rgba(240, 120, 64, 0.12);
+  color: var(--orange);
+  border-color: rgba(240, 120, 64, 0.25);
+}
+.badgeFree {
+  background: rgba(0, 204, 168, 0.12);
+  color: var(--teal);
+  border-color: rgba(0, 204, 168, 0.25);
+}
 
 /* ---- Favourite state ---- */
 .cardFavourited {
@@ -341,12 +387,13 @@
   border-radius: 5px;
   font-size: 10px;
   font-weight: 700;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
 }
 
-.agencyHDB { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-.agencyURA { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
-.agencyLTA { background: rgba(16, 185, 129, 0.15); color: #2dd4bf; }
+.agencyHDB { background: rgba(56, 182, 255, 0.12); color: #60CBFF; }
+.agencyURA { background: var(--amber-dim);          color: var(--amber-light); }
+.agencyLTA { background: rgba(0, 204, 168, 0.12);   color: var(--teal); }
 
 /* ---- Skeleton ---- */
 .skeletonSummaryBar {
