@@ -214,8 +214,12 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
   // Sync favourites from Supabase; update on change events
   useEffect(() => {
     const sync = async () => {
-      const favs = await getFavourites();
-      setFavIds(new Set(favs.map((f) => f.id)));
+      try {
+        const favs = await getFavourites();
+        setFavIds(new Set(favs.map((f) => f.id)));
+      } catch {
+        // Supabase unavailable — keep current favIds
+      }
     };
     sync();
     window.addEventListener("favouritesChange", sync);
@@ -234,16 +238,9 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
     });
   };
 
-  if (carparks.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        <div className={styles.emptyIcon}>🔍</div>
-        <p className={styles.emptyText}>No carparks found within 2km. Try a different location.</p>
-      </div>
-    );
-  }
-
+  // Hooks must be called unconditionally — compute before any early return
   const { bestPrice, savings } = useMemo(() => {
+    if (!carparks.length) return { bestPrice: 0, savings: "0.00" };
     const best = Math.min(...carparks.map((c) => c.cost));
     const worst = Math.max(...carparks.map((c) => c.cost));
     return { bestPrice: best, savings: (worst - best).toFixed(2) };
@@ -263,6 +260,15 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
     () => (favouriteSuggestion ? [favouriteSuggestion, ...recommendations] : recommendations),
     [favouriteSuggestion, recommendations]
   );
+
+  if (carparks.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <div className={styles.emptyIcon}>🔍</div>
+        <p className={styles.emptyText}>No carparks found within 2km. Try a different location.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.listWrapper}>

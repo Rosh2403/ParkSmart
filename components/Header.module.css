@@ -37,7 +37,7 @@
 .logoLetter {
   font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 700; /* Rajdhani max weight is 700 — 800 silently falls back to 700 anyway */
   color: var(--amber);
   line-height: 1;
   letter-spacing: -0.02em;

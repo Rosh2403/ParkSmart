@@ -79,6 +79,7 @@
 }
 
 .cardSelected {
+  background: #1a1e26; /* fallback for Android WebView < Chrome 111 (no color-mix support) */
   background: color-mix(in srgb, var(--bg-secondary) 88%, var(--amber) 12%);
   border-color: rgba(212, 168, 90, 0.12);
   border-left-color: var(--amber);
