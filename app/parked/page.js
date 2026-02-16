@@ -6,9 +6,10 @@ import { logSpend } from "@/lib/spendStorage";
 import { calculateParkingCost } from "@/lib/parking";
 import {
   requestNotificationPermission,
-  scheduleParkingReminder,
+  scheduleParkingReminders,
   cancelParkingReminder,
 } from "@/lib/notifications";
+import { logRiskEvent } from "@/lib/riskLog";
 import styles from "./parked.module.css";
 
 const ParkedMap = dynamic(() => import("@/components/ParkedMap"), { ssr: false });
@@ -29,6 +30,29 @@ const REMINDER_PRESETS = [
   { label: "15 min", mins: 15 },
   { label: "30 min", mins: 30 },
 ];
+
+function buildReminderSequence(baseMins) {
+  if (!baseMins) return [];
+  if (baseMins >= 30) return [30, 15, 10, 5];
+  if (baseMins >= 15) return [15, 10, 5];
+  if (baseMins >= 10) return [10, 5];
+  return [5];
+}
+
+function formatReminderSequence(reminderMinsList = []) {
+  if (!Array.isArray(reminderMinsList) || reminderMinsList.length === 0) return "No reminder set";
+  return `Reminders set · ${reminderMinsList.map((m) => `${m}m`).join(", ")} before expiry`;
+}
+
+function getRiskState(remainingMs) {
+  if (remainingMs <= 0) {
+    return { key: "overdue", label: "Overdue Risk", icon: "⚠️" };
+  }
+  if (remainingMs <= 15 * 60 * 1000) {
+    return { key: "due_soon", label: "Due Soon", icon: "🟠" };
+  }
+  return { key: "safe", label: "Safe", icon: "✅" };
+}
 
 function formatCountdown(ms) {
   if (ms <= 0) {
@@ -59,6 +83,11 @@ export default function ParkedPage() {
   const [gpsError, setGpsError] = useState("");
   const [prefilledCarpark, setPrefilledCarpark] = useState(null);
   const [loggedEntry, setLoggedEntry] = useState(null); // brief confirmation after done
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [zoneConfirmed, setZoneConfirmed] = useState(false);
+  const [plateConfirmed, setPlateConfirmed] = useState(false);
+  const [allowChecklistSkip, setAllowChecklistSkip] = useState(false);
+  const [overdueLogged, setOverdueLogged] = useState(false);
 
   // Load session and any pre-filled carpark from the Find tab
   useEffect(() => {
@@ -78,7 +107,28 @@ export default function ParkedPage() {
     return () => clearInterval(id);
   }, [session]);
 
+  useEffect(() => {
+    if (!session || countdown === null) return;
+    if (countdown <= 0 && !overdueLogged) {
+      logRiskEvent("OVERDUE_STARTED", {
+        carparkId: session.carparkId || null,
+        carparkName: session.carparkName || "Unknown Carpark",
+      });
+      setOverdueLogged(true);
+    }
+    if (countdown > 0 && overdueLogged) {
+      setOverdueLogged(false);
+    }
+  }, [session, countdown, overdueLogged]);
+
   const handleParkHere = useCallback(() => {
+    const checklistComplete = paymentConfirmed && zoneConfirmed && plateConfirmed;
+    if (!checklistComplete && !allowChecklistSkip) {
+      setGpsError("Confirm payment, zone, and plate before parking, or enable skip with warning.");
+      setGpsState("error");
+      return;
+    }
+
     if (!navigator.geolocation) {
       setGpsError("Geolocation is not supported by your browser.");
       setGpsState("error");
@@ -91,23 +141,43 @@ export default function ParkedPage() {
         const { latitude: lat, longitude: lng } = pos.coords;
         const expiresAt = Date.now() + selectedDuration.ms;
         const reminderMins = selectedReminder.mins;
+        const reminderMinsList = buildReminderSequence(reminderMins);
 
         const saved = saveSession({
           lat, lng, expiresAt, reminderMins,
+          reminderMinsList,
           carparkId:   prefilledCarpark?.id   || null,
           carparkName: prefilledCarpark?.name || "",
           agency:      prefilledCarpark?.agency    || "HDB",
           isCentral:   prefilledCarpark?.isCentral || false,
+          paymentConfirmed,
+          zoneConfirmed,
+          plateConfirmed,
+          checklistSkipped: !checklistComplete,
+          escalationEnabled: true,
+          escalationMins: 10,
+          escalationCount: 3,
         });
         setSession(saved);
         setGpsState("idle");
+        setOverdueLogged(false);
 
-        // Request permission + schedule reminder (non-blocking, best-effort)
-        if (reminderMins > 0) {
-          const granted = await requestNotificationPermission();
-          if (granted) {
-            await scheduleParkingReminder({ expiresAt, reminderMins });
-          }
+        if (!checklistComplete) {
+          logRiskEvent("CHECKLIST_SKIPPED", {
+            carparkId: saved.carparkId || null,
+            carparkName: saved.carparkName || "Unknown Carpark",
+          });
+        }
+
+        // Request permission + schedule reminders (non-blocking, best-effort)
+        const granted = await requestNotificationPermission();
+        if (granted) {
+          await scheduleParkingReminders({
+            expiresAt,
+            reminderMinsList,
+            escalationMins: 10,
+            escalationCount: 3,
+          });
         }
       },
       (err) => {
@@ -121,22 +191,37 @@ export default function ParkedPage() {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  }, [selectedDuration, selectedReminder]);
+  }, [
+    selectedDuration,
+    selectedReminder,
+    prefilledCarpark,
+    paymentConfirmed,
+    zoneConfirmed,
+    plateConfirmed,
+    allowChecklistSkip,
+  ]);
 
   const handleExtend = async (extraMs) => {
     const updated = extendSession(extraMs);
     if (!updated) return;
     setSession({ ...updated });
-    // Reschedule reminder with the same lead time but updated expiry
-    if (updated.reminderMins > 0) {
-      await scheduleParkingReminder({
+    // Reschedule reminders with the updated expiry.
+    const reminderMinsList = Array.isArray(updated.reminderMinsList)
+      ? updated.reminderMinsList
+      : buildReminderSequence(updated.reminderMins);
+    const granted = await requestNotificationPermission();
+    if (granted) {
+      await scheduleParkingReminders({
         expiresAt: updated.expiresAt,
-        reminderMins: updated.reminderMins,
+        reminderMinsList,
+        escalationMins: updated.escalationMins || 10,
+        escalationCount: updated.escalationEnabled ? (updated.escalationCount || 3) : 0,
       });
     }
   };
 
   const handleClear = async () => {
+    const wasOverdue = (countdown ?? 0) <= 0;
     // Log the spend before clearing the session
     if (session) {
       const endedAt = Date.now();
@@ -160,6 +245,12 @@ export default function ParkedPage() {
         lng:          session.lng,
       });
       if (entry) setLoggedEntry(entry);
+      if (wasOverdue) {
+        logRiskEvent("OVERDUE_RESOLVED", {
+          carparkId: session.carparkId || null,
+          carparkName: session.carparkName || "Unknown Carpark",
+        });
+      }
       // Clear the pre-filled carpark after use
       try { localStorage.removeItem("parksmart_last_selected_carpark"); } catch {}
       setPrefilledCarpark(null);
@@ -169,6 +260,7 @@ export default function ParkedPage() {
     setSession(null);
     setGpsState("idle");
     setGpsError("");
+    setOverdueLogged(false);
   };
 
   const handleNavigate = () => {
@@ -177,12 +269,24 @@ export default function ParkedPage() {
     window.open(url, "_blank");
   };
 
+  const handleOpenParkingApp = () => {
+    const appUrl = "parking.sg://";
+    const webUrl = "https://www.parking.sg/";
+    window.location.href = appUrl;
+    setTimeout(() => {
+      window.open(webUrl, "_blank");
+    }, 900);
+  };
+
   // ── Active session view ──────────────────────────────────────────────────
   if (session) {
     const { text: countdownText, expired } = formatCountdown(countdown ?? 0);
-    const reminderLabel = session.reminderMins
-      ? `Reminder set · ${session.reminderMins} min before expiry`
-      : "No reminder set";
+    const risk = getRiskState(countdown ?? 0);
+    const reminderLabel = formatReminderSequence(
+      Array.isArray(session.reminderMinsList)
+        ? session.reminderMinsList
+        : buildReminderSequence(session.reminderMins)
+    );
 
     return (
       <main className={styles.main}>
@@ -204,6 +308,9 @@ export default function ParkedPage() {
 
           {/* Timer */}
           <div className={styles.timerCard}>
+            <div className={`${styles.riskChip} ${styles[`riskChip_${risk.key}`]}`}>
+              {risk.icon} {risk.label}
+            </div>
             <div className={styles.timerLabel}>
               {expired ? "⚠️ EXPIRED" : "⏱ TIME REMAINING"}
             </div>
@@ -216,6 +323,11 @@ export default function ParkedPage() {
             <div className={styles.reminderStatus}>
               🔔 {reminderLabel}
             </div>
+            {session.checklistSkipped && (
+              <div className={styles.checklistRisk}>
+                ⚠️ Compliance checklist was skipped for this session.
+              </div>
+            )}
 
             {/* Extend buttons */}
             <div className={styles.extendRow}>
@@ -229,6 +341,9 @@ export default function ParkedPage() {
           {/* Actions */}
           <button className={styles.navigateBtn} onClick={handleNavigate}>
             🗺 Navigate to My Car
+          </button>
+          <button className={styles.openParkingAppBtn} onClick={handleOpenParkingApp}>
+            Open Parking.sg
           </button>
           <button className={styles.clearBtn} onClick={handleClear}>
             Done Parking
@@ -264,6 +379,47 @@ export default function ParkedPage() {
           </div>
         )}
 
+        {/* Compliance checklist */}
+        <div className={styles.pickerBlock}>
+          <div className={styles.pickerTitle}>Before you start (fine-risk check)</div>
+          <div className={styles.checklistGrid}>
+            <button
+              className={`${styles.checkItem} ${paymentConfirmed ? styles.checkItemDone : ""}`}
+              onClick={() => setPaymentConfirmed((v) => !v)}
+            >
+              <span className={styles.checkIcon}>{paymentConfirmed ? "✓" : "○"}</span>
+              Payment session started
+            </button>
+            <button
+              className={`${styles.checkItem} ${zoneConfirmed ? styles.checkItemDone : ""}`}
+              onClick={() => setZoneConfirmed((v) => !v)}
+            >
+              <span className={styles.checkIcon}>{zoneConfirmed ? "✓" : "○"}</span>
+              Correct parking zone selected
+            </button>
+            <button
+              className={`${styles.checkItem} ${plateConfirmed ? styles.checkItemDone : ""}`}
+              onClick={() => setPlateConfirmed((v) => !v)}
+            >
+              <span className={styles.checkIcon}>{plateConfirmed ? "✓" : "○"}</span>
+              Vehicle plate confirmed
+            </button>
+          </div>
+          <label className={styles.skipRow}>
+            <input
+              type="checkbox"
+              checked={allowChecklistSkip}
+              onChange={(e) => setAllowChecklistSkip(e.target.checked)}
+            />
+            <span>Skip checklist with warning</span>
+          </label>
+          {!allowChecklistSkip && !(paymentConfirmed && zoneConfirmed && plateConfirmed) && (
+            <div className={styles.checklistWarn}>
+              Complete all three checks before parking to reduce fine risk.
+            </div>
+          )}
+        </div>
+
         {/* Duration picker */}
         <div className={styles.pickerBlock}>
           <div className={styles.pickerTitle}>Parking duration</div>
@@ -296,7 +452,7 @@ export default function ParkedPage() {
           </div>
           {selectedReminder.mins > 0 && (
             <p className={styles.reminderHint}>
-              You&apos;ll get a notification {selectedReminder.label} before your time is up.
+              You&apos;ll get stacked reminders before expiry, plus overdue risk nudges.
             </p>
           )}
         </div>
