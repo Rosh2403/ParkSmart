@@ -2,6 +2,10 @@
 
 Find the most optimal parking spot for your destination in Singapore, with real-time availability from LTA DataMall.
 
+## Why I Built This
+
+I once paid $25 just for parking on a trip to the CBD — more than the meal I went there for. I knew cheaper carparks existed nearby, but by the time I'd circled around and checked a few, I'd already wasted time and fuel. ParkSmart started from that frustration: I wanted a tool that could instantly tell me the cheapest, closest, and best-value carpark for wherever I was heading in Singapore, before I even left home.
+
 ## Features
 
 - Real-time carpark availability from HDB, URA, and LTA carparks (updates every minute)
@@ -65,3 +69,5 @@ Built-in Singapore public carpark rates:
 - OneMap API (Singapore geocoding, free, no key needed)
 - Leaflet (interactive map)
 - Google Maps (navigation links)
+
+
