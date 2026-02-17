@@ -70,4 +70,8 @@ Built-in Singapore public carpark rates:
 - Leaflet (interactive map)
 - Google Maps (navigation links)
 
+<img width="311" height="687" alt="Screenshot 2026-02-17 at 6 31 41 PM" src="https://github.com/user-attachments/assets/b4dbb531-3345-4b9a-aef7-6df364895c46" />
+<img width="308" height="687" alt="Screenshot 2026-02-17 at 6 32 14 PM" src="https://github.com/user-attachments/assets/dabdaebe-74ac-4099-b9a9-8cba0d6b598e" />
+<img width="309" height="686" alt="Screenshot 2026-02-17 at 6 32 23 PM" src="https://github.com/user-attachments/assets/fb7290ee-c285-4c23-bbc2-7683def5bf4d" />
+<img width="310" height="687" alt="Screenshot 2026-02-17 at 6 32 30 PM" src="https://github.com/user-attachments/assets/1642523b-4b33-411a-8003-bf6c55d19b62" />
 
