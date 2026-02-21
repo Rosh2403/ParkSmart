@@ -117,7 +117,13 @@
 .reminderStatus {
   font-size: 12px;
   color: var(--text-muted);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+}
+
+.checklistRisk {
+  font-size: 12px;
+  color: #f59e0b;
+  margin-bottom: 12px;
 }
 
 /* ── Park button ── */
@@ -222,6 +228,38 @@
   margin-bottom: 14px;
 }
 
+.riskChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.riskChip_safe {
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.riskChip_due_soon {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.riskChip_overdue {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
 /* ── Extend row ── */
 .extendRow {
   display: flex;
@@ -267,6 +305,21 @@
   transition: all 0.2s;
 }
 .navigateBtn:active { transform: scale(0.97); }
+
+.openParkingAppBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
 /* ── Done Parking button ── */
 .clearBtn {
@@ -326,4 +379,52 @@
   cursor: pointer;
   padding: 0 4px;
   line-height: 1;
+}
+
+.checklistGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkItemDone {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+}
+
+.checkIcon {
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.skipRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.checklistWarn {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #f59e0b;
 }

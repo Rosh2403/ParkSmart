@@ -166,7 +166,14 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
                 e.stopPropagation();
                 try {
                   localStorage.setItem("parksmart_last_selected_carpark", JSON.stringify({
-                    id: cp.id, name: cp.name, agency: cp.agency, isCentral: cp.isCentral,
+                    id: cp.id,
+                    name: cp.name,
+                    agency: cp.agency,
+                    isCentral: cp.isCentral,
+                    lat: cp.lat,
+                    lng: cp.lng,
+                    requiresAppPayment: cp.requiresAppPayment,
+                    hasGantry: cp.hasGantry,
                   }));
                 } catch {}
                 window.location.href = "/parked";

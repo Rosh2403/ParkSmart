@@ -6,7 +6,7 @@ import { logSpend } from "@/lib/spendStorage";
 import { calculateParkingCost } from "@/lib/parking";
 import {
   requestNotificationPermission,
-  scheduleParkingReminder,
+  scheduleArrivalPaymentReminder,
   cancelParkingReminder,
 } from "@/lib/notifications";
 import styles from "./parked.module.css";
@@ -22,13 +22,32 @@ const DURATION_PRESETS = [
   { label: "4h",   ms: 240 * 60 * 1000 },
 ];
 
-const REMINDER_PRESETS = [
-  { label: "None", mins: 0 },
-  { label: "5 min", mins: 5 },
-  { label: "10 min", mins: 10 },
-  { label: "15 min", mins: 15 },
-  { label: "30 min", mins: 30 },
-];
+function getTimerState(remainingMs) {
+  if (remainingMs <= 0) return { key: "overdue", label: "Expired", icon: "⚠️" };
+  if (remainingMs <= 15 * 60 * 1000) return { key: "due_soon", label: "Due Soon", icon: "🟠" };
+  return { key: "safe", label: "On Track", icon: "✅" };
+}
+
+function haversineMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function shouldSendArrivalPaymentReminder(carpark, parkedLat, parkedLng) {
+  if (!carpark) return false;
+  const requiresAppPayment = carpark.requiresAppPayment ?? carpark.agency !== "LTA";
+  const hasGantry = carpark.hasGantry ?? !requiresAppPayment;
+  if (!requiresAppPayment || hasGantry) return false;
+
+  if (typeof carpark.lat !== "number" || typeof carpark.lng !== "number") return false;
+  return haversineMeters(parkedLat, parkedLng, carpark.lat, carpark.lng) <= 300;
+}
 
 function formatCountdown(ms) {
   if (ms <= 0) {
@@ -54,7 +73,6 @@ export default function ParkedPage() {
   const [session, setSession] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [selectedDuration, setSelectedDuration] = useState(DURATION_PRESETS[3]); // 2h default
-  const [selectedReminder, setSelectedReminder] = useState(REMINDER_PRESETS[3]); // 15 min default
   const [gpsState, setGpsState] = useState("idle"); // idle | loading | error
   const [gpsError, setGpsError] = useState("");
   const [prefilledCarpark, setPrefilledCarpark] = useState(null);
@@ -90,23 +108,25 @@ export default function ParkedPage() {
       async (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
         const expiresAt = Date.now() + selectedDuration.ms;
-        const reminderMins = selectedReminder.mins;
+        const sendArrivalReminder = shouldSendArrivalPaymentReminder(prefilledCarpark, lat, lng);
 
         const saved = saveSession({
-          lat, lng, expiresAt, reminderMins,
+          lat, lng, expiresAt,
           carparkId:   prefilledCarpark?.id   || null,
           carparkName: prefilledCarpark?.name || "",
           agency:      prefilledCarpark?.agency    || "HDB",
           isCentral:   prefilledCarpark?.isCentral || false,
+          arrivalPaymentReminderSent: sendArrivalReminder,
         });
         setSession(saved);
         setGpsState("idle");
 
-        // Request permission + schedule reminder (non-blocking, best-effort)
-        if (reminderMins > 0) {
+        if (sendArrivalReminder) {
           const granted = await requestNotificationPermission();
           if (granted) {
-            await scheduleParkingReminder({ expiresAt, reminderMins });
+            await scheduleArrivalPaymentReminder({
+              carparkName: saved.carparkName || "",
+            });
           }
         }
       },
@@ -121,19 +141,15 @@ export default function ParkedPage() {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  }, [selectedDuration, selectedReminder]);
+  }, [
+    selectedDuration,
+    prefilledCarpark,
+  ]);
 
-  const handleExtend = async (extraMs) => {
+  const handleExtend = (extraMs) => {
     const updated = extendSession(extraMs);
     if (!updated) return;
     setSession({ ...updated });
-    // Reschedule reminder with the same lead time but updated expiry
-    if (updated.reminderMins > 0) {
-      await scheduleParkingReminder({
-        expiresAt: updated.expiresAt,
-        reminderMins: updated.reminderMins,
-      });
-    }
   };
 
   const handleClear = async () => {
@@ -177,12 +193,19 @@ export default function ParkedPage() {
     window.open(url, "_blank");
   };
 
+  const handleOpenParkingApp = () => {
+    const appUrl = "parking.sg://";
+    const webUrl = "https://www.parking.sg/";
+    window.location.href = appUrl;
+    setTimeout(() => {
+      window.open(webUrl, "_blank");
+    }, 900);
+  };
+
   // ── Active session view ──────────────────────────────────────────────────
   if (session) {
     const { text: countdownText, expired } = formatCountdown(countdown ?? 0);
-    const reminderLabel = session.reminderMins
-      ? `Reminder set · ${session.reminderMins} min before expiry`
-      : "No reminder set";
+    const timerState = getTimerState(countdown ?? 0);
 
     return (
       <main className={styles.main}>
@@ -204,6 +227,9 @@ export default function ParkedPage() {
 
           {/* Timer */}
           <div className={styles.timerCard}>
+            <div className={`${styles.riskChip} ${styles[`riskChip_${timerState.key}`]}`}>
+              {timerState.icon} {timerState.label}
+            </div>
             <div className={styles.timerLabel}>
               {expired ? "⚠️ EXPIRED" : "⏱ TIME REMAINING"}
             </div>
@@ -213,9 +239,11 @@ export default function ParkedPage() {
             <div className={styles.timerMeta}>
               Parked at {formatTime(session.parkedAt)} · until {formatTime(session.expiresAt)}
             </div>
-            <div className={styles.reminderStatus}>
-              🔔 {reminderLabel}
-            </div>
+            {session.arrivalPaymentReminderSent && (
+              <div className={styles.reminderStatus}>
+                🔔 Payment reminder sent for this no-gantry carpark.
+              </div>
+            )}
 
             {/* Extend buttons */}
             <div className={styles.extendRow}>
@@ -229,6 +257,9 @@ export default function ParkedPage() {
           {/* Actions */}
           <button className={styles.navigateBtn} onClick={handleNavigate}>
             🗺 Navigate to My Car
+          </button>
+          <button className={styles.openParkingAppBtn} onClick={handleOpenParkingApp}>
+            Open Parking.sg
           </button>
           <button className={styles.clearBtn} onClick={handleClear}>
             Done Parking
@@ -246,6 +277,7 @@ export default function ParkedPage() {
         <h2 className={styles.heroTitle}>I&apos;m Parked Here</h2>
         <p className={styles.heroSub}>
           Drop a pin at your car&apos;s GPS location and set a parking timer.
+          You&apos;ll get an app-payment push reminder when you arrive at eligible no-gantry carparks.
         </p>
 
         {/* Pre-filled carpark chip */}
@@ -278,27 +310,6 @@ export default function ParkedPage() {
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Reminder picker */}
-        <div className={styles.pickerBlock}>
-          <div className={styles.pickerTitle}>Reminder before expiry</div>
-          <div className={styles.reminderGrid}>
-            {REMINDER_PRESETS.map((r) => (
-              <button
-                key={r.label}
-                className={`${styles.reminderBtn} ${selectedReminder.mins === r.mins ? styles.reminderBtnActive : ""}`}
-                onClick={() => setSelectedReminder(r)}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-          {selectedReminder.mins > 0 && (
-            <p className={styles.reminderHint}>
-              You&apos;ll get a notification {selectedReminder.label} before your time is up.
-            </p>
-          )}
         </div>
 
         {/* GPS error */}

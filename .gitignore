@@ -7,9 +7,13 @@ out/
 
 # IDE
 .idea/
+.cursor/
 
 # Skill references (local only)
 references/
+.codex/
+.gemini/
+CLAUDE.md
 
 # Capacitor / Android build artifacts
 android/.gradle/
