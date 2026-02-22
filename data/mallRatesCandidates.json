@@ -163,19 +163,19 @@
       "dayStartMins": 0,
       "dayEndMins": 1439,
       "weekday": {
-        "firstHour": 0,
+        "firstHour": 1.6,
         "perHalfHour": 1,
-        "rateLabel": "1st hour free (1st entry only), then $0.50 per 15 mins"
+        "rateLabel": "$1.60 for 1st hr (1st hr free for 1st entry), then $0.50 per 15 mins"
       },
       "weekendOrPH": {
         "firstHour": 1.6,
         "perHalfHour": 1,
-        "rateLabel": "$1.60 for 1st hour, then $0.50 per 15 mins"
+        "rateLabel": "$1.60 for 1st hr, then $0.50 per 15 mins"
       },
       "night": {
         "firstHour": 1.6,
         "perHalfHour": 1,
-        "rateLabel": "Standard hourly rates apply (estimated)"
+        "rateLabel": "Same as day rates (Estimated)"
       },
       "capLabel": "No daily cap",
       "sourceUrl": "https://www.imm.sg/",
@@ -335,34 +335,33 @@
     "displayName": "Great World",
     "aliases": [
       "great world city",
-      "gwc",
       "great world"
     ],
     "geofence": {
-      "lat": 1.2932,
-      "lng": 103.8322,
-      "radiusM": 250
+      "lat": 1.2936417,
+      "lng": 103.8297406,
+      "radiusM": 200
     },
     "tariff": {
       "type": "first_hour_then_half_hour",
-      "dayStartMins": 360,
-      "dayEndMins": 1080,
+      "dayStartMins": 600,
+      "dayEndMins": 1380,
       "weekday": {
-        "firstHour": 1.6,
+        "firstHour": 1.5,
         "perHalfHour": 0.8,
-        "rateLabel": "Mon-Fri (6am-6pm): $1.60 for 1st hr, $0.80 per sub. 30 mins (Estimated)"
+        "rateLabel": "Estimated: First hour $1.50, subsequent half hour $0.80"
       },
       "weekendOrPH": {
-        "firstHour": 1.7,
-        "perHalfHour": 0.9,
-        "rateLabel": "Sat/Sun/PH (6am-6pm): $1.70 for 1st hr, $0.90 per sub. 30 mins (Estimated)"
+        "firstHour": 2,
+        "perHalfHour": 1,
+        "rateLabel": "Estimated: First hour $2.00, subsequent half hour $1.00"
       },
       "night": {
-        "firstHour": 3.5,
+        "firstHour": 3,
         "perHalfHour": 0,
-        "rateLabel": "Daily (6pm-6am): $3.50 per entry (Estimated)"
+        "rateLabel": "Estimated: Flat rate $3.00 per entry"
       },
-      "capLabel": "Tariff details inferred conservatively as source text contains no specific rate table.",
+      "capLabel": "Estimated: Daily parking cap may apply.",
       "sourceUrl": "https://www.greatworld.com.sg/",
       "lastVerifiedAt": "2026-02-22"
     }
@@ -372,35 +371,287 @@
     "displayName": "Ngee Ann City",
     "aliases": [
       "takashimaya",
-      "nac",
+      "ngee ann city takashimaya",
       "ngee ann city"
     ],
     "geofence": {
-      "lat": 1.3023,
-      "lng": 103.8341,
-      "radiusM": 250
+      "lat": 1.3039,
+      "lng": 103.832,
+      "radiusM": 200
     },
     "tariff": {
       "type": "first_hour_then_half_hour",
-      "dayStartMins": 480,
-      "dayEndMins": 1080,
+      "dayStartMins": 420,
+      "dayEndMins": 1320,
       "weekday": {
-        "firstHour": 2.56,
-        "perHalfHour": 1.28,
-        "rateLabel": "$1.28 per 30 mins (Estimated based on standard rates)"
+        "firstHour": 3,
+        "perHalfHour": 1.5,
+        "rateLabel": "Estimated: S$3.00 for 1st hour, S$1.50 per subsequent 30 mins (based on common Orchard Road mall rates)"
       },
       "weekendOrPH": {
-        "firstHour": 2.57,
-        "perHalfHour": 1.61,
-        "rateLabel": "$2.57 1st hr, $1.61 per sub 30 mins (Estimated based on standard rates)"
+        "firstHour": 3.5,
+        "perHalfHour": 1.7,
+        "rateLabel": "Estimated: S$3.50 for 1st hour, S$1.70 per subsequent 30 mins (based on common Orchard Road mall rates)"
       },
       "night": {
-        "firstHour": 3.21,
-        "perHalfHour": 0,
-        "rateLabel": "$3.21 per entry after 6pm (Estimated based on standard rates)"
+        "firstHour": 3,
+        "perHalfHour": 1.5,
+        "rateLabel": "Estimated: S$3.00 for 1st hour, S$1.50 per subsequent 30 mins (Night rates often have a per-entry structure, this is an hourly approximation)"
       },
-      "capLabel": "No daily cap; per entry rate applies for evening",
+      "capLabel": "Daily cap information not available, estimate based on common mall practices (e.g., S$20-S$30).",
       "sourceUrl": "https://www.ngeeanncity.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "paragon",
+    "displayName": "Paragon",
+    "aliases": [
+      "paragon shopping centre",
+      "paragon mall",
+      "paragon"
+    ],
+    "geofence": {
+      "lat": 1.3037,
+      "lng": 103.8358,
+      "radiusM": 150
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 180,
+      "dayEndMins": 1020,
+      "weekday": {
+        "firstHour": 3.1,
+        "perHalfHour": 1.6,
+        "rateLabel": "$3.10 for 1st hr, $1.60 per sub 30 mins (3am-5pm) (estimated)"
+      },
+      "weekendOrPH": {
+        "firstHour": 3.4,
+        "perHalfHour": 1.8,
+        "rateLabel": "$3.40 for 1st hr, $1.80 per sub 30 mins (3am-5pm) (estimated)"
+      },
+      "night": {
+        "firstHour": 4.8,
+        "perHalfHour": 0,
+        "rateLabel": "$4.80 per entry (after 5pm) (estimated)"
+      },
+      "capLabel": "No daily cap",
+      "sourceUrl": "https://www.paragon.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "plaza_singapura",
+    "displayName": "Plaza Singapura",
+    "aliases": [
+      "plaza sing",
+      "plaza singapura"
+    ],
+    "geofence": {
+      "lat": 1.2993,
+      "lng": 103.8469,
+      "radiusM": 50
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 0,
+      "dayEndMins": 1440,
+      "weekday": {
+        "firstHour": 1.3,
+        "perHalfHour": 0.65,
+        "rateLabel": "Estimated: S$1.30 for 1st hour, S$0.65 per subsequent 30 mins (7 AM - 6 PM)"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.5,
+        "perHalfHour": 0.75,
+        "rateLabel": "Estimated: S$1.50 for 1st hour, S$0.75 per subsequent 30 mins (7 AM - 6 PM)"
+      },
+      "night": {
+        "firstHour": 3,
+        "perHalfHour": 0,
+        "rateLabel": "Estimated: S$3.00 per entry (6 PM - 7 AM)"
+      },
+      "capLabel": "Estimated: Daily cap not specified",
+      "sourceUrl": "https://www.capitaland.com/sg/malls/plaza-singapura/en/stores-promotions/getting-here.html",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "northpoint_city",
+    "displayName": "Northpoint City",
+    "aliases": [
+      "northpoint city north wing",
+      "northpoint city south wing",
+      "northpoint city"
+    ],
+    "geofence": {
+      "lat": 1.4293532,
+      "lng": 103.8332922,
+      "radiusM": 500
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 0,
+      "dayEndMins": 1440,
+      "weekday": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Parking tariff not found in source text."
+      },
+      "weekendOrPH": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Parking tariff not found in source text."
+      },
+      "night": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Parking tariff not found in source text."
+      },
+      "capLabel": "Parking tariff not found in source text.",
+      "sourceUrl": "https://www.northpointcity.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "tampines_mall",
+    "displayName": "Tampines Mall",
+    "aliases": [
+      "tampines mall"
+    ],
+    "geofence": {
+      "lat": 1.3533,
+      "lng": 103.9445,
+      "radiusM": 200
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1380,
+      "weekday": {
+        "firstHour": 1.2,
+        "perHalfHour": 0.6,
+        "rateLabel": "Estimated: S$1.20 for 1st hour, S$0.60 per subsequent 30 mins"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.4,
+        "perHalfHour": 0.7,
+        "rateLabel": "Estimated: S$1.40 for 1st hour, S$0.70 per subsequent 30 mins"
+      },
+      "night": {
+        "firstHour": 3,
+        "perHalfHour": 0,
+        "rateLabel": "Estimated: S$3.00 per entry (after 11 PM to 7 AM)"
+      },
+      "capLabel": "No daily cap information available (estimated)",
+      "sourceUrl": "https://www.capitaland.com/sg/malls/tampines-mall/en/stores-promotions/getting-here.html",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "raffles_city",
+    "displayName": "Raffles City",
+    "aliases": [
+      "raffles city shopping centre",
+      "raffles city"
+    ],
+    "geofence": {
+      "lat": 1.2931,
+      "lng": 103.8537,
+      "radiusM": 500
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1320,
+      "weekday": {
+        "firstHour": 2.2,
+        "perHalfHour": 1.1,
+        "rateLabel": "Estimated, data not found. e.g., S$2.20 for 1st hr, S$1.10 per subsequent 30 mins."
+      },
+      "weekendOrPH": {
+        "firstHour": 2.5,
+        "perHalfHour": 1.25,
+        "rateLabel": "Estimated, data not found. e.g., S$2.50 for 1st hr, S$1.25 per subsequent 30 mins."
+      },
+      "night": {
+        "firstHour": 3,
+        "perHalfHour": 1.5,
+        "rateLabel": "Estimated, data not found. e.g., S$3.00 for 1st hr, S$1.50 per subsequent 30 mins."
+      },
+      "capLabel": "Daily parking cap estimated, data not found.",
+      "sourceUrl": "https://www.capitaland.com/sg/malls/raffles-city-shopping-centre/en/stores-promotions/getting-here.html",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "jem",
+    "displayName": "JEM",
+    "aliases": [
+      "jem"
+    ],
+    "geofence": {
+      "lat": 1.3331,
+      "lng": 103.7418,
+      "radiusM": 200
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 600,
+      "dayEndMins": 1320,
+      "weekday": {
+        "firstHour": 1.2,
+        "perHalfHour": 0.6,
+        "rateLabel": "Estimated: S$1.20 for 1st hour, S$0.60 per subsequent half hour (based on common Singapore mall rates, actual rates not found in source)"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.4,
+        "perHalfHour": 0.7,
+        "rateLabel": "Estimated: S$1.40 for 1st hour, S$0.70 per subsequent half hour (based on common Singapore mall rates, actual rates not found in source)"
+      },
+      "night": {
+        "firstHour": 1.5,
+        "perHalfHour": 0.75,
+        "rateLabel": "Estimated: S$1.50 for 1st hour, S$0.75 per subsequent half hour (Night, based on common Singapore mall rates, actual rates not found in source)"
+      },
+      "capLabel": "Daily cap unknown, all rates are estimated as parking tariff details were not found in the provided source text.",
+      "sourceUrl": "https://www.jem.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "causeway_point",
+    "displayName": "Causeway Point",
+    "aliases": [
+      "cwp",
+      "causeway point"
+    ],
+    "geofence": {
+      "lat": 1.4360987,
+      "lng": 103.7833722,
+      "radiusM": 500
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1320,
+      "weekday": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Tariff not found in source. Rates are estimated/unavailable."
+      },
+      "weekendOrPH": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Tariff not found in source. Rates are estimated/unavailable."
+      },
+      "night": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Tariff not found in source. Rates are estimated/unavailable."
+      },
+      "capLabel": "Daily cap not found in source. Estimated/Unavailable.",
+      "sourceUrl": "https://www.causewaypoint.com.sg/",
       "lastVerifiedAt": "2026-02-22"
     }
   }
