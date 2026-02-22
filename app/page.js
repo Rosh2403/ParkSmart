@@ -20,6 +20,7 @@ export default function Home() {
   const [selectedCarpark, setSelectedCarpark] = useState(null);
   const [duration, setDuration] = useState(2);
   const [priority, setPriority] = useState("balanced");
+  const [searchRadiusKm, setSearchRadiusKm] = useState(2);
   const [showMap, setShowMap] = useState(false);
   const [searched, setSearched] = useState(false);
   const [initialDest, setInitialDest] = useState(null);
@@ -43,6 +44,7 @@ export default function Home() {
 
       setCarparks(data.carparks || []);
       setRecommendations(data.recommendations || []);
+      setSearchRadiusKm(typeof data.searchRadiusKm === "number" ? data.searchRadiusKm : 2);
       if (data.carparks?.length > 0) {
         setSelectedCarpark(data.carparks[0]);
         setShowMap(true);
@@ -51,6 +53,7 @@ export default function Home() {
       setError(err.message);
       setCarparks([]);
       setRecommendations([]);
+      setSearchRadiusKm(2);
     } finally {
       setLoading(false);
     }
@@ -90,6 +93,7 @@ export default function Home() {
       setSelectedCarpark(parsed.selectedCarpark || null);
       setDuration(typeof parsed.duration === "number" ? parsed.duration : 2);
       setPriority(parsed.priority || "balanced");
+      setSearchRadiusKm(typeof parsed.searchRadiusKm === "number" ? parsed.searchRadiusKm : 2);
       setShowMap(!!parsed.showMap);
       setSearched(!!parsed.searched);
       setInitialSearchState(parsed.searchPanel || null);
@@ -116,6 +120,7 @@ export default function Home() {
           selectedCarpark,
           duration,
           priority,
+          searchRadiusKm,
           showMap,
           searched,
           searchPanel: {
@@ -138,6 +143,7 @@ export default function Home() {
     selectedCarpark,
     duration,
     priority,
+    searchRadiusKm,
     showMap,
   ]);
 
@@ -198,6 +204,7 @@ export default function Home() {
             onSelectCarpark={setSelectedCarpark}
             onNavigate={handleNavigate}
             duration={duration}
+            searchRadiusKm={searchRadiusKm}
           />
         )}
 

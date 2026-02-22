@@ -49,6 +49,15 @@ function AgencyBadge({ agency }) {
   return <span className={`${styles.agencyBadge} ${cls}`}>{agency}</span>;
 }
 
+function RateSourceBadge({ rateSource }) {
+  const estimated = rateSource !== "official";
+  return (
+    <span className={`${styles.rateSourceBadge} ${estimated ? styles.rateSourceEstimated : styles.rateSourceOfficial}`}>
+      {estimated ? "Estimated" : "Official"}
+    </span>
+  );
+}
+
 function StatBox({ label, value, sub, color }) {
   return (
     <div className={styles.statBox}>
@@ -103,6 +112,7 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
           <div className={styles.cardMeta}>
             <AgencyBadge agency={cp.agency} />
             {cp.isCentral && <span className={styles.centralLabel}>Central</span>}
+            <RateSourceBadge rateSource={cp.rateSource} />
           </div>
           <div className={styles.cardStats}>
             <div>
@@ -215,7 +225,15 @@ export function ResultsSkeleton() {
   );
 }
 
-export default function ResultsList({ carparks, recommendations, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
+export default function ResultsList({
+  carparks,
+  recommendations,
+  selectedCarpark,
+  onSelectCarpark,
+  onNavigate,
+  duration,
+  searchRadiusKm = 2,
+}) {
   const [favIds, setFavIds] = useState(new Set());
 
   // Sync favourites from Supabase; update on change events
@@ -272,7 +290,9 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
     return (
       <div className={styles.emptyState}>
         <div className={styles.emptyIcon}>🔍</div>
-        <p className={styles.emptyText}>No carparks found within 2km. Try a different location.</p>
+        <p className={styles.emptyText}>
+          No carparks found within {searchRadiusKm}km. Try a different location.
+        </p>
       </div>
     );
   }

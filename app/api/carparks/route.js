@@ -35,9 +35,22 @@ export async function GET(request) {
 
   try {
     const rawData = await getCachedCarparks();
-    const carparks = processCarparks(rawData, lat, lng, duration, priority, radius, startTime);
+    const radiusCandidates = [...new Set([radius, 5, 10].filter((r) => Number.isFinite(r) && r > 0))];
+    let carparks = [];
+    let searchRadiusKm = radiusCandidates[0] || 2;
+    for (const candidate of radiusCandidates) {
+      carparks = processCarparks(rawData, lat, lng, duration, priority, candidate, startTime);
+      searchRadiusKm = candidate;
+      if (carparks.length > 0) break;
+    }
     const recommendations = getTimeAwareRecommendations(carparks, startTime, duration);
-    return Response.json({ carparks, recommendations, total: carparks.length });
+    return Response.json({
+      carparks,
+      recommendations,
+      total: carparks.length,
+      searchRadiusKm,
+      expandedRadius: searchRadiusKm > radius,
+    });
   } catch (err) {
     console.error("Carpark API error:", err);
     return Response.json({ error: err.message }, { status: 500 });
