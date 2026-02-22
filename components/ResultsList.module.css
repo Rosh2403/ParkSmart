@@ -188,6 +188,7 @@
 .lotsHigh  { color: var(--green);  font-weight: 600; }
 .lotsMid   { color: var(--yellow); font-weight: 600; }
 .lotsLow   { color: var(--red);    font-weight: 600; }
+.lotsUnknown { color: var(--text-muted); font-weight: 600; }
 
 /* ---- Expanded detail panel ---- */
 .expandedPanel {

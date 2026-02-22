@@ -70,8 +70,10 @@ function StatBox({ label, value, sub, color }) {
 
 function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggleFav, duration, staggerIndex = 0 }) {
   const cp = carpark;
+  const hasKnownLots = typeof cp.availableLots === "number" && cp.availableLots >= 0;
   const lotsClass =
-    cp.availableLots > 30 ? styles.lotsHigh
+    !hasKnownLots ? styles.lotsUnknown
+    : cp.availableLots > 30 ? styles.lotsHigh
     : cp.availableLots > 10 ? styles.lotsMid
     : styles.lotsLow;
 
@@ -127,7 +129,7 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
             <div className={styles.cardMinorStats}>
               <span>🚶 {cp.walkTimeMin}min</span>
               <span>📏 {cp.distanceKm}km</span>
-              <span className={lotsClass}>🅿️ {cp.availableLots} lots</span>
+              <span className={lotsClass}>🅿️ {hasKnownLots ? `${cp.availableLots} lots` : "lots n/a"}</span>
             </div>
           </div>
         </div>
@@ -139,9 +141,17 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
             <StatBox label="RATE" value={cp.rateLabel} sub={cp.capLabel} color="var(--accent-light)" />
             <StatBox
               label="AVAILABILITY"
-              value={`${cp.availableLots} lots`}
-              sub={cp.availableLots > 30 ? "High" : cp.availableLots > 10 ? "Medium" : "Low"}
-              color={cp.availableLots > 30 ? "var(--green)" : cp.availableLots > 10 ? "var(--yellow)" : "var(--red)"}
+              value={hasKnownLots ? `${cp.availableLots} lots` : "N/A"}
+              sub={
+                hasKnownLots
+                  ? (cp.availableLots > 30 ? "High" : cp.availableLots > 10 ? "Medium" : "Low")
+                  : "Unknown"
+              }
+              color={
+                hasKnownLots
+                  ? (cp.availableLots > 30 ? "var(--green)" : cp.availableLots > 10 ? "var(--yellow)" : "var(--red)")
+                  : "var(--text-muted)"
+              }
             />
             <StatBox label="DISTANCE" value={`${cp.distanceKm}km`} sub={`${cp.walkTimeMin}min walk`} color="var(--text-primary)" />
           </div>
