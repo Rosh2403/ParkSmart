@@ -20,6 +20,7 @@ export async function GET(request) {
   const duration = parseFloat(searchParams.get("duration")) || 2;
   const priority = searchParams.get("priority") || "balanced";
   const radius = parseFloat(searchParams.get("radius")) || 2;
+  const destName = searchParams.get("destName") || "";
 
   if (isNaN(lat) || isNaN(lng)) {
     return Response.json({ error: "Invalid lat/lng" }, { status: 400 });
@@ -39,7 +40,7 @@ export async function GET(request) {
     let carparks = [];
     let searchRadiusKm = radiusCandidates[0] || 2;
     for (const candidate of radiusCandidates) {
-      carparks = processCarparks(rawData, lat, lng, duration, priority, candidate, startTime);
+      carparks = processCarparks(rawData, lat, lng, duration, priority, candidate, startTime, destName);
       searchRadiusKm = candidate;
       if (carparks.length > 0) break;
     }

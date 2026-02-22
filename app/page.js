@@ -37,7 +37,7 @@ export default function Home() {
 
     try {
       const res = await fetch(
-        `/api/carparks?lat=${dest.lat}&lng=${dest.lng}&duration=${dur}&priority=${pri}&radius=2`
+        `/api/carparks?lat=${dest.lat}&lng=${dest.lng}&duration=${dur}&priority=${pri}&radius=2&destName=${encodeURIComponent(dest.name || "")}`
       );
       const data = await res.json();
       if (data.error) throw new Error(data.error);
