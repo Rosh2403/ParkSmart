@@ -1,0 +1,407 @@
+[
+  {
+    "key": "nex",
+    "displayName": "NEX",
+    "aliases": [
+      "nex shopping mall",
+      "serangoon nex"
+    ],
+    "geofence": {
+      "lat": 1.349619,
+      "lng": 103.872475,
+      "radiusM": 250
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1080,
+      "weekday": {
+        "firstHour": 1.4,
+        "perHalfHour": 0.7,
+        "rateLabel": "Mon-Fri: $1.40 for 1st hour, $0.70 for subsequent 30 mins or part thereof (7am-6pm)"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.6,
+        "perHalfHour": 0.8,
+        "rateLabel": "Sat/Sun/PH: $1.60 for 1st hour, $0.80 for subsequent 30 mins or part thereof (7am-6pm)"
+      },
+      "night": {
+        "firstHour": 2.8,
+        "perHalfHour": 0,
+        "rateLabel": "All days: $2.80 per entry (6pm-7am next day)"
+      },
+      "capLabel": "No daily cap specified in source.",
+      "sourceUrl": "https://www.nex.com.sg",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "waterway_point",
+    "displayName": "Waterway Point",
+    "aliases": [
+      "waterway point"
+    ],
+    "geofence": {
+      "lat": 1.4064466,
+      "lng": 103.8995097,
+      "radiusM": 500
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1380,
+      "weekday": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Rates unknown, estimated as 0.00 SGD. Please check mall website for actual tariff."
+      },
+      "weekendOrPH": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Rates unknown, estimated as 0.00 SGD. Please check mall website for actual tariff."
+      },
+      "night": {
+        "firstHour": 0,
+        "perHalfHour": 0,
+        "rateLabel": "Rates unknown, estimated as 0.00 SGD. Please check mall website for actual tariff."
+      },
+      "capLabel": "Daily cap unknown. Please check mall website for actual tariff.",
+      "sourceUrl": "https://www.waterwaypoint.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "westgate",
+    "displayName": "Westgate",
+    "aliases": [
+      "westgate mall",
+      "westgate singapore",
+      "westgate"
+    ],
+    "geofence": {
+      "lat": 1.3337,
+      "lng": 103.7425,
+      "radiusM": 150
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 360,
+      "dayEndMins": 1759,
+      "weekday": {
+        "firstHour": 1.31,
+        "perHalfHour": 1.09,
+        "rateLabel": "$1.31 1st hr, $0.545 per 15 mins (Estimated)"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.31,
+        "perHalfHour": 1.09,
+        "rateLabel": "$1.31 1st hr, $0.545 per 15 mins (Estimated)"
+      },
+      "night": {
+        "firstHour": 2.73,
+        "perHalfHour": 0,
+        "rateLabel": "$2.73 per entry after 6pm (Estimated)"
+      },
+      "capLabel": "No daily cap",
+      "sourceUrl": "https://www.westgate.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "vivocity",
+    "displayName": "VivoCity",
+    "aliases": [
+      "vivo",
+      "harbourfront",
+      "vivocity"
+    ],
+    "geofence": {
+      "lat": 1.2644,
+      "lng": 103.8222,
+      "radiusM": 300
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1080,
+      "weekday": {
+        "firstHour": 1.6,
+        "perHalfHour": 0.8,
+        "rateLabel": "$1.60 for 1st hr, $0.80 per 30 mins (7am-6pm) [Estimated]"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.9,
+        "perHalfHour": 1,
+        "rateLabel": "$1.90 for 1st hr, $1.00 per 30 mins (7am-6pm) [Estimated]"
+      },
+      "night": {
+        "firstHour": 3.5,
+        "perHalfHour": 0,
+        "rateLabel": "$3.50 per entry (6pm-4am); $2.50/hr (4am-7am) [Estimated]"
+      },
+      "capLabel": "Gold Members: 2-hour complimentary parking daily with min. $8,000 spend per quarter",
+      "sourceUrl": "https://www.vivocity.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "imm",
+    "displayName": "IMM",
+    "aliases": [
+      "international merchandising mart",
+      "imm building",
+      "imm mall",
+      "imm"
+    ],
+    "geofence": {
+      "lat": 1.3347,
+      "lng": 103.747,
+      "radiusM": 250
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 0,
+      "dayEndMins": 1439,
+      "weekday": {
+        "firstHour": 0,
+        "perHalfHour": 1,
+        "rateLabel": "1st hour free (1st entry only), then $0.50 per 15 mins"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.6,
+        "perHalfHour": 1,
+        "rateLabel": "$1.60 for 1st hour, then $0.50 per 15 mins"
+      },
+      "night": {
+        "firstHour": 1.6,
+        "perHalfHour": 1,
+        "rateLabel": "Standard hourly rates apply (estimated)"
+      },
+      "capLabel": "No daily cap",
+      "sourceUrl": "https://www.imm.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "paragon_singapore",
+    "displayName": "Paragon",
+    "aliases": [
+      "paragon shopping centre",
+      "paragon orchard",
+      "paragon",
+      "paragon singapore"
+    ],
+    "geofence": {
+      "lat": 1.3037,
+      "lng": 103.8358,
+      "radiusM": 150
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 180,
+      "dayEndMins": 1020,
+      "weekday": {
+        "firstHour": 3.21,
+        "perHalfHour": 1.61,
+        "rateLabel": "Mon-Thu 3am-5pm: $3.21 1st hr, $1.61 per sub 30 mins"
+      },
+      "weekendOrPH": {
+        "firstHour": 4.82,
+        "perHalfHour": 2.14,
+        "rateLabel": "Sat/Sun/PH 3am-5pm: $4.82 1st hr, $2.14 per sub 30 mins"
+      },
+      "night": {
+        "firstHour": 4.82,
+        "perHalfHour": 0,
+        "rateLabel": "After 5pm: $4.82/entry (Mon-Thu), $5.35/entry (Fri-Sun/PH)"
+      },
+      "capLabel": "Rates include 9% GST. Friday 3am-5pm follows weekday rates; Friday 5pm onwards follows weekend per-entry rate. Estimates based on standard mall policy.",
+      "sourceUrl": "https://www.paragon.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "ion_orchard",
+    "displayName": "ION Orchard",
+    "aliases": [
+      "ion",
+      "ion orchard mall",
+      "ion orchard"
+    ],
+    "geofence": {
+      "lat": 1.304,
+      "lng": 103.832,
+      "radiusM": 150
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 480,
+      "dayEndMins": 1020,
+      "weekday": {
+        "firstHour": 2.67,
+        "perHalfHour": 2.56,
+        "rateLabel": "Mon-Fri 8am-4:59pm: $2.67 1st hr, $1.28 per 15 mins (Estimated due to 404 source)"
+      },
+      "weekendOrPH": {
+        "firstHour": 2.56,
+        "perHalfHour": 3.76,
+        "rateLabel": "Sat/Sun/PH 8am-4:59pm: $2.56 1st hr, $1.88 per 15 mins (Estimated due to 404 source)"
+      },
+      "night": {
+        "firstHour": 3.74,
+        "perHalfHour": 0,
+        "rateLabel": "Daily 5pm-11:59pm: $3.74 per entry; 12am-7:59am: $1.07 per 15 mins (Estimated due to 404 source)"
+      },
+      "capLabel": "No daily cap indicated",
+      "sourceUrl": "https://www.ionorchard.com/en/visit-us/parking.html",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "bugis_junction",
+    "displayName": "Bugis Junction",
+    "aliases": [
+      "bugis junction mall",
+      "bugis junction"
+    ],
+    "geofence": {
+      "lat": 1.3002,
+      "lng": 103.8561,
+      "radiusM": 150
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 480,
+      "dayEndMins": 1080,
+      "weekday": {
+        "firstHour": 2.2,
+        "perHalfHour": 1.1,
+        "rateLabel": "$2.20 for 1st hr, $0.55 per 15 mins (Estimated from CapitaLand standard city rates)"
+      },
+      "weekendOrPH": {
+        "firstHour": 2.4,
+        "perHalfHour": 1.2,
+        "rateLabel": "$2.40 for 1st hr, $0.60 per 15 mins (Estimated from CapitaLand standard city rates)"
+      },
+      "night": {
+        "firstHour": 3.3,
+        "perHalfHour": 0,
+        "rateLabel": "$3.30 per entry after 18:00 (Estimated)"
+      },
+      "capLabel": "No daily cap indicated (Estimate)",
+      "sourceUrl": "https://www.capitaland.com/sg/malls/bugis-junction/en/stores-promotions/getting-here.html",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "suntec_city",
+    "displayName": "Suntec City",
+    "aliases": [
+      "suntec",
+      "suntec city mall",
+      "suntec city"
+    ],
+    "geofence": {
+      "lat": 1.2935,
+      "lng": 103.8572,
+      "radiusM": 350
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 420,
+      "dayEndMins": 1020,
+      "weekday": {
+        "firstHour": 2.6,
+        "perHalfHour": 1.3,
+        "rateLabel": "$2.60 for 1st hour, $1.30 per 30 mins (0700-1700) [Estimate]"
+      },
+      "weekendOrPH": {
+        "firstHour": 2.6,
+        "perHalfHour": 1.3,
+        "rateLabel": "$2.60 for 1st hour, $1.30 per 30 mins (0700-1700) [Estimate]"
+      },
+      "night": {
+        "firstHour": 2.6,
+        "perHalfHour": 0,
+        "rateLabel": "$2.60 per entry (after 1700) [Estimate]"
+      },
+      "capLabel": "Evening per-entry rate applies after 5pm [Estimate]",
+      "sourceUrl": "https://www.sunteccity.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "great_world",
+    "displayName": "Great World",
+    "aliases": [
+      "great world city",
+      "gwc",
+      "great world"
+    ],
+    "geofence": {
+      "lat": 1.2932,
+      "lng": 103.8322,
+      "radiusM": 250
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 360,
+      "dayEndMins": 1080,
+      "weekday": {
+        "firstHour": 1.6,
+        "perHalfHour": 0.8,
+        "rateLabel": "Mon-Fri (6am-6pm): $1.60 for 1st hr, $0.80 per sub. 30 mins (Estimated)"
+      },
+      "weekendOrPH": {
+        "firstHour": 1.7,
+        "perHalfHour": 0.9,
+        "rateLabel": "Sat/Sun/PH (6am-6pm): $1.70 for 1st hr, $0.90 per sub. 30 mins (Estimated)"
+      },
+      "night": {
+        "firstHour": 3.5,
+        "perHalfHour": 0,
+        "rateLabel": "Daily (6pm-6am): $3.50 per entry (Estimated)"
+      },
+      "capLabel": "Tariff details inferred conservatively as source text contains no specific rate table.",
+      "sourceUrl": "https://www.greatworld.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  },
+  {
+    "key": "ngee_ann_city",
+    "displayName": "Ngee Ann City",
+    "aliases": [
+      "takashimaya",
+      "nac",
+      "ngee ann city"
+    ],
+    "geofence": {
+      "lat": 1.3023,
+      "lng": 103.8341,
+      "radiusM": 250
+    },
+    "tariff": {
+      "type": "first_hour_then_half_hour",
+      "dayStartMins": 480,
+      "dayEndMins": 1080,
+      "weekday": {
+        "firstHour": 2.56,
+        "perHalfHour": 1.28,
+        "rateLabel": "$1.28 per 30 mins (Estimated based on standard rates)"
+      },
+      "weekendOrPH": {
+        "firstHour": 2.57,
+        "perHalfHour": 1.61,
+        "rateLabel": "$2.57 1st hr, $1.61 per sub 30 mins (Estimated based on standard rates)"
+      },
+      "night": {
+        "firstHour": 3.21,
+        "perHalfHour": 0,
+        "rateLabel": "$3.21 per entry after 6pm (Estimated based on standard rates)"
+      },
+      "capLabel": "No daily cap; per entry rate applies for evening",
+      "sourceUrl": "https://www.ngeeanncity.com.sg/",
+      "lastVerifiedAt": "2026-02-22"
+    }
+  }
+]

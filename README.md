@@ -62,6 +62,32 @@ Built-in Singapore public carpark rates:
 - URA: Similar to HDB Central rates
 - LTA (malls): ~$3.00/hr average, $30/day cap
 
+Mall overrides:
+- Official mall overrides are stored in `/data/mallRatesCatalog.js`
+- Fallback rows can appear as `Estimated Mall Rates` when no official tariff is configured
+
+## Gemini-Assisted Mall Rate Extraction
+
+You can generate structured mall tariff candidates (for review) using Gemini.
+
+1. Add key to `.env.local`:
+```
+GEMINI_API_KEY=your_key
+# Optional override:
+# GEMINI_MODEL=gemini-2.0-flash
+```
+
+2. Run extractor:
+```bash
+npm run rates:extract -- --name "NEX" --url "https://www.nex.com.sg" --source-text-file ./notes/nex.txt
+```
+
+3. Review output in:
+`/data/mallRatesCandidates.json`
+
+4. Manually vet and copy valid entries into:
+`/data/mallRatesCatalog.js`
+
 ## Tech Stack
 
 - Next.js 14 (React + API routes)
@@ -74,4 +100,3 @@ Built-in Singapore public carpark rates:
 <img width="308" height="687" alt="Screenshot 2026-02-17 at 6 32 14 PM" src="https://github.com/user-attachments/assets/dabdaebe-74ac-4099-b9a9-8cba0d6b598e" />
 <img width="309" height="686" alt="Screenshot 2026-02-17 at 6 32 23 PM" src="https://github.com/user-attachments/assets/fb7290ee-c285-4c23-bbc2-7683def5bf4d" />
 <img width="310" height="687" alt="Screenshot 2026-02-17 at 6 32 30 PM" src="https://github.com/user-attachments/assets/1642523b-4b33-411a-8003-bf6c55d19b62" />
-
