@@ -177,6 +177,12 @@
   margin-left: 4px;
 }
 
+.tripCostLine {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 .cardMinorStats {
   display: flex;
   gap: 10px;
@@ -280,6 +286,12 @@
 .costTotalAmount {
   color: var(--teal);
   font-family: var(--font-mono);
+}
+
+.erpNote {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-dim);
 }
 
 /* ---- Expanded action buttons row ---- */

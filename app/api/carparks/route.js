@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { fetchCarparkAvailability, processCarparks, getTimeAwareRecommendations } from "@/lib/parking";
+import { estimateErpCost } from "@/lib/erp";
 
 // Cache all LTA carpark data for 60 seconds using Next.js Data Cache.
 // Unlike a module-level variable, unstable_cache persists across serverless
@@ -44,6 +45,26 @@ export async function GET(request) {
       searchRadiusKm = candidate;
       if (carparks.length > 0) break;
     }
+    carparks = carparks.map((cp) => {
+      const erp = estimateErpCost({
+        destinationLat: lat,
+        destinationLng: lng,
+        startTime,
+        durationHours: duration,
+        isCentral: !!cp.isCentral,
+      });
+      const totalTripCost = Math.round((cp.cost + erp.total) * 100) / 100;
+      return {
+        ...cp,
+        erpInbound: erp.inbound,
+        erpOutbound: erp.outbound,
+        erpTotal: erp.total,
+        erpConfidence: erp.confidence,
+        erpNote: erp.note,
+        erpZone: erp.zone,
+        totalTripCost,
+      };
+    });
     const recommendations = getTimeAwareRecommendations(carparks, startTime, duration);
     return Response.json({
       carparks,

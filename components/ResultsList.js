@@ -125,6 +125,12 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
                 ${cp.cost.toFixed(2)}
               </span>
               <span className={styles.cardCostLabel}>{cp.isFreeToday ? "FREE" : "total"}</span>
+              {typeof cp.totalTripCost === "number" && (
+                <div className={styles.tripCostLine}>
+                  Trip est: <strong>${cp.totalTripCost.toFixed(2)}</strong>{" "}
+                  {cp.erpTotal > 0 ? `(ERP $${cp.erpTotal.toFixed(2)})` : "(No ERP est)"}
+                </div>
+              )}
             </div>
             <div className={styles.cardMinorStats}>
               <span>🚶 {cp.walkTimeMin}min</span>
@@ -162,6 +168,18 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
               <span>${cp.ratePerHour.toFixed(2)}/hr × {duration}h</span>
               <span>${(cp.ratePerHour * duration).toFixed(2)}</span>
             </div>
+            {typeof cp.erpInbound === "number" && (
+              <div className={styles.costRow}>
+                <span>ERP inbound</span>
+                <span>${cp.erpInbound.toFixed(2)}</span>
+              </div>
+            )}
+            {typeof cp.erpOutbound === "number" && (
+              <div className={styles.costRow}>
+                <span>ERP outbound</span>
+                <span>${cp.erpOutbound.toFixed(2)}</span>
+              </div>
+            )}
             {cp.capApplied && (
               <div className={styles.capRow}>
                 <span>Daily cap applied</span>
@@ -169,9 +187,12 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
               </div>
             )}
             <div className={styles.costTotal}>
-              <span>You pay</span>
-              <span className={styles.costTotalAmount}>${cp.cost.toFixed(2)}</span>
+              <span>Total trip estimate</span>
+              <span className={styles.costTotalAmount}>
+                ${typeof cp.totalTripCost === "number" ? cp.totalTripCost.toFixed(2) : cp.cost.toFixed(2)}
+              </span>
             </div>
+            {cp.erpNote && <div className={styles.erpNote}>{cp.erpNote}</div>}
           </div>
 
           <div className={styles.expandedBtns}>
@@ -281,6 +302,14 @@ export default function ResultsList({
     return { bestPrice: best, savings: (worst - best).toFixed(2) };
   }, [carparks]);
 
+  const { bestTripPrice, tripSavings } = useMemo(() => {
+    if (!carparks.length) return { bestTripPrice: 0, tripSavings: "0.00" };
+    const totals = carparks.map((c) => (typeof c.totalTripCost === "number" ? c.totalTripCost : c.cost));
+    const best = Math.min(...totals);
+    const worst = Math.max(...totals);
+    return { bestTripPrice: best, tripSavings: (worst - best).toFixed(2) };
+  }, [carparks]);
+
   // Smart suggestion: if a saved carpark is in results with low availability, suggest an alternative
   const favouriteSuggestion = useMemo(() => {
     if (!favIds.size) return null;
@@ -314,7 +343,8 @@ export default function ResultsList({
         {[
           { label: "Found", value: `${carparks.length} carparks`, color: "var(--accent-light)" },
           { label: "Best Price", value: `$${bestPrice.toFixed(2)}`, color: "var(--green)" },
-          { label: "Potential Savings", value: `$${savings}`, color: "var(--yellow)" },
+          { label: "Best Trip Cost", value: `$${bestTripPrice.toFixed(2)}`, color: "var(--teal)" },
+          { label: "Potential Savings", value: `$${tripSavings || savings}`, color: "var(--yellow)" },
         ].map((s, i) => (
           <div key={i} className={styles.summaryChip}>
             <div className={styles.summaryChipLabel}>{s.label}</div>
